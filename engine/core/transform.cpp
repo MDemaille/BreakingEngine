@@ -3,7 +3,7 @@
 
 Transform::Transform(GameObject* parent) : Component(parent)
 {
-
+  setObjectName("core/Transform");
 }
 
 Transform::~Transform()
