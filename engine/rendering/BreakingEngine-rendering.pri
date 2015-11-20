@@ -1,3 +1,5 @@
-HEADERS += $$PWD/mainwindow.h
-SOURCES += $$PWD/mainwindow.cpp
+HEADERS += $$PWD/mainwindow.h \
+    $$PWD/openglwindow.h
+SOURCES += $$PWD/mainwindow.cpp \
+    $$PWD/openglwindow.cpp
 FORMS += $$PWD/mainwindow.ui
