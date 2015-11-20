@@ -1,0 +1,24 @@
+#ifndef OCTREE_H
+#define OCTREE_H
+#include <QtCore>
+#include <QVector3>
+#include <QVector>
+
+
+template<class T>
+class Octree<T> : QObject {
+  Q_OBJECT
+private:
+  QVector<T*> children;
+public:
+  explicit Octree(Octree* parent=0);
+  Octree()
+  ~Octree();
+
+  bool isLeaf();
+  bool isRoot();
+};
+
+class AdaptabiteOctree
+
+#endif
