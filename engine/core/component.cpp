@@ -9,3 +9,10 @@ Component::Component(GameObject *parent): QObject(parent)
 Component::~Component() {
 
 }
+
+GameObject *Component::gameObject()
+{
+    QObject* pt = parent();
+
+    return dynamic_cast<GameObject*>(pt);
+}

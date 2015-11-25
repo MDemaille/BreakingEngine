@@ -1,5 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
+#include <QList>
 
 class GameObject;
 
@@ -10,13 +11,18 @@ class Camera;
 class FreeFlyCamera;
 class EulerCamera;
 class Light;
-class Renderer;
+
 class Updatable;
+class Renderer;
+
 class ColliderTriggerable;
 class Behaviour;//Component, Updatable, ColliderTriggerable
 
 class MeshRenderer;
 class SpriteRenderer;
+
+typedef QList<Component*> ComponentList;
+typedef QList<GameObject*> GameObjectList;
 
 
 //Collision Components
