@@ -15,6 +15,8 @@ class Light;
 class Updatable;
 class Renderer;
 
+class Scene;
+
 class ColliderTriggerable;
 class Behaviour;//Component, Updatable, ColliderTriggerable
 
