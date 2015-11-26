@@ -20,12 +20,13 @@ void BreakingWindow::setupScene(Scene *scene)
     if(m_scene != nullptr)
         delete m_scene;
     m_scene = scene;
+    m_scene->setParent(this);
+    m_scene->init();
 }
 
 void BreakingWindow::initialize() {
     m_timer = new QTimer();
     connect(m_timer,SIGNAL(timeout()),this,SLOT(renderNow()));
-    m_scene->init();
     m_timer->start(1000.0/60.0);
 }
 

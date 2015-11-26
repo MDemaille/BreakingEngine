@@ -6,8 +6,9 @@
 #include <GL/gl.h>
 #include <GL/freeglut.h>
 #include "camera.h"
+#include "engine/rendering/breakingwindow.h"
 
-Scene::Scene(QObject* parent):QObject(parent)
+Scene::Scene(BreakingWindow* parent):QObject(parent)
 {
 
 }
@@ -37,9 +38,18 @@ void Scene::update() {
     }
 }
 
+BreakingWindow* Scene::parent() {
+    BreakingWindow* ptr = dynamic_cast<BreakingWindow*>(QObject::parent());
+    return ptr;
+}
+
 void Scene::render() {
+    glViewport(0, 0, this->parent()->width(), this->parent()->height());
+
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     //Clean flags
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     //Projection Mode
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

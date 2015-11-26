@@ -3,7 +3,7 @@
 
 #include "openglwindow.h"
 
-#include "engine/core/scene.h"
+#include "engine/core/common.h"
 #include <QTimer>
 
 class BreakingWindow : public virtual OpenGLWindow
