@@ -1,4 +1,5 @@
 #include "engine/rendering/breakingwindow.h"
+#include "engine/core/scene.h"
 #include "engine/rendering/renderer.h"
 #include "engine/core/gameobject.h"
 #include "engine/core/transform.h"
