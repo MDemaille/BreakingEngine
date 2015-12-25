@@ -1,4 +1,5 @@
 HEADERS += $$PWD/kdtree.h \
     $$PWD/octree.h \
     $$PWD/quadtree.h
-SOURCES += 
+SOURCES += \ 
+    $$PWD/quadtree.cpp

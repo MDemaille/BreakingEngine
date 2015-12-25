@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/shaders/breaking.fs</file>
+        <file>resources/shaders/breaking.vs</file>
+    </qresource>
+    <qresource prefix="/shaders"/>
+    <qresource prefix="/textures"/>
+</RCC>

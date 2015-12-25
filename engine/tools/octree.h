@@ -12,13 +12,12 @@ private:
   QVector<T*> children;
 public:
   explicit Octree(Octree* parent=0);
-  Octree()
-  ~Octree();
+  Octree();
+  virtual ~Octree();
 
   bool isLeaf();
   bool isRoot();
 };
 
-class AdaptabiteOctree
 
 #endif

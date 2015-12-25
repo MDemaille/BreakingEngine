@@ -4,8 +4,8 @@
 #include "engine/rendering/renderer.h"
 #include "engine/core/updatable.h"
 #include <GL/gl.h>
-#include <GL/freeglut.h>
 #include "camera.h"
+#include "engine/core/time.h"
 #include "engine/rendering/breakingwindow.h"
 
 Scene::Scene(BreakingWindow* parent):QObject(parent)
@@ -44,50 +44,61 @@ BreakingWindow* Scene::parent() {
 }
 
 void Scene::render() {
+    Time::singleton.newFrame();
     glViewport(0, 0, this->parent()->width(), this->parent()->height());
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
     //Clean flags
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     //Projection Mode
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    qDebug()<<"Scene::render():projection";
+
 
     //If a main Camera is used
-    if(Camera::main != nullptr) {
+//    if(Camera::main != nullptr) {
         //We load it
-        Camera* current = Camera::main;
+//        Camera* current = Camera::main;
+//        QMatrix4x4 projection = current->projectionMatrix();
+//        QMatrix4x4 view = current->viewMatrix();
+
         //We chose in function of the mode the better solution
-        if(current->projectionType() == Camera::PerspectiveProjection) {
+//        if(current->projectionType() == Camera::PerspectiveProjection) {
             //Perspective by glut
-            gluPerspective(current->fieldOfView(),current->aspectRatio(),
-                           current->nearPlane(),current->farPlane());
-            //replace glFrustum(...)
-        }
-        else {
+//            gluPerspective(current->fieldOfView(),current->aspectRatio(),
+//                           current->nearPlane(),current->farPlane());
+            //replace by glFrustum(...)
+//            glFrustum(current->left(),current->right(),current->bottom(),
+//                      current->top(),current->nearPlane(),current->farPlane());
+//            glFrustum(-current->right(),
+//                      current->aspectRatio()*current->right(),
+//                      -current->top(),
+//                      current->nearPlane()* ((M_PI/180)*current->fieldOfView()/2),
+//                      current->nearPlane(),
+//                      current->farPlane());
+//        }
+//        else {
             //Orthogonal camera
-            glOrtho(current->left(),current->right(),
-                    current->bottom(),current->top(),
-                    current->nearPlane(),current->farPlane());
-        }
+//            glOrtho(current->left(),current->right(),
+//                    current->bottom(),current->top(),
+//                    current->nearPlane(),current->farPlane());
+//        }
 
-    }
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    if(Camera::main != nullptr) {
-        QVector3D pos = Camera::main->gameObject()->transform()->position;
-        QVector3D view = Camera::main->viewCenter();
-        QVector3D up = Camera::main->upVector();
-        if(Camera::main->projectionType() == Camera::PerspectiveProjection)
-            gluLookAt(pos.x(),pos.y(),pos.z(),
-                      view.x(),view.y(),view.z(),
-                      up.x(),up.y(),up.z()
-                      );
+//    }
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+//    if(Camera::main != nullptr) {
 
-    }
+//        if(Camera::main->projectionType() == Camera::PerspectiveProjection) {
+
+//            Camera::main->look();
+//        }
+
+//    }
 
 
+    // Camera::main->m_viewMatrixDirty = true;
 
     for(GameObject* gameObject: m_gameObjects) {
         QList<Renderer*> renderers = gameObject->getComponents<Renderer>();

@@ -3,8 +3,11 @@
 #include "engine/core/common.h"
 #include "engine/core/component.h"
 #include "engine/core/transform.h"
+#include <QOpenGLFunctions>
 #include <QVector3D>
+
 #include <QMatrix4x4>
+using namespace std;
 
 class Camera : public virtual Component
 {
@@ -50,7 +53,6 @@ public:
     static Camera* main;
     explicit Camera(GameObject* parent=0);
     virtual ~Camera();
-
 
 
     QVector3D upVector() const;
@@ -165,13 +167,70 @@ public:
         return m_top;
     }
 
+    inline void look() {
 
+//        gluLookAt(pos.x(),pos.y(),pos.z(),
+//                  view.x(),view.y(),view.z(),
+//                  up.x(),up.y(),up.z()
+//                  );
+
+            QMatrix4x4 m;
+            QVector3D forward, side, up;
+
+
+            forward.setX(viewVector().x() - gameObject()->transform()->position.x());
+            forward.setY(viewVector().y() - gameObject()->transform()->position.y());
+            forward.setZ(viewVector().z() - gameObject()->transform()->position.z());
+
+
+            up.setX(upVector().x());
+            up.setY(upVector().y());
+            up.setZ(upVector().z());
+
+            forward.normalize();
+
+            /* Side = forward x up */
+            side = QVector3D::crossProduct(forward,up);
+            side.normalize();
+
+
+            /* Recompute up as: up = side x forward */
+            up = QVector3D::crossProduct(side,forward);
+            up.normalize();
+            m_upVector = up;
+            m.setToIdentity();
+
+            m.setColumn(0,QVector4D(side,0));
+
+            m.setColumn(1,QVector4D(up,0));
+
+            m.setColumn(2,QVector4D(-1.0*forward,0));
+
+
+            glMultMatrixf(m.data());
+            glTranslatef(-gameObject()->transform()->position.x(),
+                         -gameObject()->transform()->position.y(),
+                         -gameObject()->transform()->position.z());
+    }
 
     QMatrix4x4 viewMatrix() {
-        if (m_viewMatrixDirty)
+        //if (m_viewMatrixDirty)
         {
             m_viewMatrix.setToIdentity();
+            m_viewMatrix.rotate(gameObject()->transform()->rotation);
             m_viewMatrix.lookAt( gameObject()->transform()->position, m_viewCenter, m_upVector );
+
+
+//            QMatrix4x4 cameraTransformation;
+//            cameraTransformation.rotate(gameObject()->transform()->rotation);
+
+//            QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 5);
+//            QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, -1, 0);
+
+
+//            m_viewMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
+
+            //m_viewMatrix.rotate(gameObject()->transform()->rotation);
             m_viewMatrixDirty = false;
         }
         return m_viewMatrix;
@@ -181,20 +240,31 @@ public:
         return m_projectionMatrix;
     }
     QMatrix4x4 viewProjectionMatrix() {
-        if ( m_viewMatrixDirty || m_viewProjectionMatrixDirty )
+        //if ( m_viewMatrixDirty || m_viewProjectionMatrixDirty )
         {
             m_viewProjectionMatrix = m_projectionMatrix * viewMatrix();
             m_viewProjectionMatrixDirty = false;
         }
         return m_viewProjectionMatrix;
     }
+    void translate( const QVector3D& vLocal, CameraTranslationOption option );
+    void translateWorld(const QVector3D& vWorld , CameraTranslationOption option );
+    QQuaternion tiltRotation( const float& angle ) const;
+    QQuaternion panRotation( const float& angle ) const;
+    QQuaternion panRotation( const float& angle, const QVector3D& axis ) const;
+    QQuaternion rollRotation( const float& angle ) const;
 
+    void tilt( const float& angle );
+    void pan( const float& angle );
+    void pan( const float& angle, const QVector3D& axis );
+    void roll( const float& angle );
 
+    void tiltAboutViewCenter( const float& angle );
+    void panAboutViewCenter( const float& angle );
+    void rollAboutViewCenter( const float& angle );
 
-//    QQuaternion tiltRotation( const float& angle ) const;
-//    QQuaternion panRotation( const float& angle ) const;
-//    QQuaternion panRotation( const float& angle, const QVector3D& axis ) const;
-//    QQuaternion rollRotation( const float& angle ) const;
+    void rotate( const QQuaternion& q );
+    void rotateAboutViewCenter( const QQuaternion& q );
 
 
 
